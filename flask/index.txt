@@ -1,0 +1,33 @@
+Flask is a lightweight web application framework written in python
+
+It provides the following:
+1. A web server gateway interface(WSGI)
+    -> standard way of how applications in the internet communicate with other application
+2. A routing system
+    -> navigation system
+3. A middleware
+    -> handling the request/response model
+4. A way to add extensions
+    -> if you want to install other depandancies
+    => Object Relation Mapper(ORM) = database abstraction
+    => Security and Authentication
+    => Migration
+    => Form Validation
+    => Serialisation and Deserialisation
+
+
+Flask Architecture
+ => a way to seperate concerns
+I want to model the flask app to follow a design
+ => MVC (model, views, and controllers)
+
+ MODEL => Domain, interface, and Repository
+    => create the class Object
+    => handle storage of the instance (using in memory(using data structures) or to a db file)
+
+VIEWS => Services, this is the businness logic
+        => how the reponse will be formatted
+
+CONTROLLERS => contain the call where the service is executed
+            => Routing -> url is matched and method to run
+    
