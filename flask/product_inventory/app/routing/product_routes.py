@@ -10,7 +10,8 @@ def create_routes(controllers):
     
     @prodcut_routes_blueprint.route("/", methods=["GET"])
     def fetch():
-        return jsonify(controllers.fetch_all_data())
+        res = controllers.fetch_all_data()
+        return jsonify([r.to_dict() for r in res])
     
     @prodcut_routes_blueprint.route("/", methods=["POST"])
     def create_a_record():
@@ -19,6 +20,6 @@ def create_routes(controllers):
 
         user_input = controllers.create_product(payload)
 
-        return jsonify(user_input), 201
+        return jsonify(user_input.to_dict()), 201
     
     return prodcut_routes_blueprint
