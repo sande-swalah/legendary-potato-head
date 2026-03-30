@@ -8,7 +8,7 @@ from flask import Flask, request, jsonify, g
 wakadinali = Flask(__name__)
 
 # DATABASE SETUP
-DATABASE_NAME = "victim_of_madness"
+DATABASE_NAME = "victim_of_madness.db"
 
 def get_database():
     """
@@ -56,7 +56,7 @@ def start_db():
         ]
 
         # Generate a random collection of 100 books
-        genres = ["fictional", "Non-fiction", "History", "self help", "academia", "academia", "philopsophy"]
+        genres = ["fictional", "Non-fiction", "History", "self help", "academia", "philopsophy"]
         for item in range(1, 101):
             title = f"Book, {item}"
             author = f"Author {item}"
@@ -113,10 +113,28 @@ def fetch_books():
     db = get_database()
 
     # we structure out a basic query
-    query = "SELECT * FROM books"
+    query = """
+    SELECT * 
+        FROM books
+            WHERE 1 = 1
+    """
+    list_of_params = []
 
+    genre = request.args.get("query")
+    if genre:
+        query += " and genre = ?"
+        list_of_params.append(genre)
+
+    avail = request.args.get("available", None)
+
+    if avail is not None:
+        query += " and available = ?"
+        list_of_params.append(int(avail))
+
+    query += "ORDER BY id DESC"
     # you execute the query and get the data or none
-    row_from_db = db.execute(query).fetchmany()
+    row_from_db = db.execute(query, list_of_params).fetchall()  
+    print(row_from_db)
 
     # parse the data to a python object
     obj = [dict(item) for item in row_from_db]
