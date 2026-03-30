@@ -131,7 +131,48 @@ def fetch_books():
         query += " and available = ?"
         list_of_params.append(int(avail))
 
-    query += "ORDER BY id DESC"
+    #query += "ORDER BY id DESC"
+
+    #creating a query for adding a new book
+    # new_book = request.get()
+
+    # if new_book:
+    #     query = """
+    #     INSERT INTO books (title, author, genre, year_pub, available)
+    #     VALUES (?, ?, ?, ?, ?)
+    #     """
+    #     list_of_params = [
+    #         new_book.get("title"),
+    #         new_book.get("author"),
+    #         new_book.get("genre"),
+    #         new_book.get("year_pub"),
+    #         new_book.get("available", 1)
+    #     ]
+    #     db.execute(query, list_of_params)
+    #     db.commit()
+    #     return api_response(message="Book added successfully", status_code=201)
+
+
+    #fetching one book
+    book_id = request.args.get("id", None)
+    if book_id: 
+        query += " and id = ?"
+        list_of_params.append(int(book_id))
+
+    query += " ORDER BY id DESC"
+
+    one_book = db.execute(query, list_of_params).fetchone()
+
+
+    #maintaining persistence of the query parameters and have error handling
+    if book_id:
+        if one_book is None:
+            return error_response(message="Book not found")
+        else:
+            return api_response(data=row_to_dict(one_book), message="Fetch was successful", status_code=200)
+
+
+
     # you execute the query and get the data or none
     row_from_db = db.execute(query, list_of_params).fetchall()  
     print(row_from_db)
