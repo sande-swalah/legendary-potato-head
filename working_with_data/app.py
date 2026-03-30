@@ -185,6 +185,33 @@ def fetch_books():
 
 
 
+# POST - create a new book
+@wakadinali.route("/api/books", methods=["POST"])
+def create_book():
+    db = get_database()
+    new_book = request.get_json()
+
+    if not new_book:
+        return error_response(message="Request body must be JSON", status_code=400)
+
+    title = new_book.get("title")
+    author = new_book.get("author")
+    genre = new_book.get("genre")
+    year_pub = new_book.get("year_pub")
+    available = new_book.get("available", 1)
+
+    if not all([title, author, genre, year_pub]):
+        return error_response(message="title, author, genre, and year_pub are required", status_code=400)
+
+    db.execute("""
+        INSERT INTO books (title, author, genre, year_pub, available)
+        VALUES (?, ?, ?, ?, ?)
+    """, [title, author, genre, year_pub, available])
+    db.commit()
+
+    return api_response(message="Book created successfully", status_code=201)
+
+
 # run the app and start the db process
 if __name__ == "__main__":
     with wakadinali.app_context():
