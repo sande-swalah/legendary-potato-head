@@ -19,6 +19,7 @@ class InMemoRepo:
         """
         product_id = len(self._store) + 1
         self._store[product_id] = product
+        print(self._store)
         return product
 
     def fetch_a_single_product(self, product_id):

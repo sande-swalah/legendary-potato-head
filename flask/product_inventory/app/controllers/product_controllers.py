@@ -4,7 +4,6 @@ class ProductController:
         self.service = ProductServiceLayer
 
     def create_product(self, data):
-
         return self.service.create_data(data)
     
     def fetch_all_data(self):
